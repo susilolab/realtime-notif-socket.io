@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Nodejs</title>
+</head>
+<body>
+<div id="msg"></div>
+<br />
+<p>
+	<a href="javascript:void(0);" onclick="send_msg('Pesan 1');">publish Pesan</a><br />
+	<a href="javascript:void(0);" onclick="send_article('New article added');">publish Article</a><br />
+	<a href="javascript:void(0);" onclick="send_vacancy('New vacancy added');">publish Vacancy</a><br />
+	<a href="javascript:void(0);" onclick="send_applicant('New applicant apply vacancy');">publish Vacancy applied</a><br />
+</p>
+
+<script type="text/javascript" src="http://localhost:3000/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+var socket = io.connect("http://localhost:3000");
+
+socket.on('connect', function() {
+	console.log('connected');
+});
+
+socket.on('message', function(msg) {
+/*	var html = document.getElementById("msg");
+	var data = 'user: ' + msg.user;
+	data += ', id: ' + msg.id;
+	data += ', pesan: ' + msg.msg;
+	html.innerHTML += data + "<br />";*/
+	console.log(msg);
+});
+
+socket.on('article_added', function(msg) {
+	console.log(msg);
+});
+
+socket.on('vacancy_added', function(msg) {
+	console.log(msg);
+});
+
+socket.on('vacancy_applied', function(msg) {
+	console.log(msg);
+});
+
+function clear() {
+	var html = document.getElementById("msg");
+	html.innerHTML = "";
+}
+
+function send_msg(msg) {
+	var data = {msg: msg, user: 'agus', id: 1}; 
+	socket.emit('message', data);
+}
+
+function send_article(msg) {
+	var data = {msg: msg, user: 'agus', id: 1}; 
+	socket.emit('article_added', data);
+}
+
+function send_vacancy(msg) {
+	var data = {msg: msg, user: 'agus', id: 1}; 
+	socket.emit('vacancy_added', data);
+}
+
+function send_applicant(msg) {
+	var data = {msg: msg, user: 'agus', id: 1}; 
+	socket.emit('vacancy_applied', data);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Nodejs</title>
+</head>
+<body>
+<div id="msg"></div>
+<br />
+<p>
+	<a href="javascript:void(0);" onclick="s('Pesan 1');">publish Pesan1</a><br />
+	<a href="javascript:void(0);" onclick="s('Pesan 2');">publish Pesan2</a><br />
+</p>
+
+<script type="text/javascript" src="http://localhost:3000/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+var socket = io.connect("http://localhost:3000");
+
+socket.on('connect', function() {
+	console.log('connected');
+});
+
+socket.on('message', function(msg) {
+	var html = document.getElementById("msg");
+	var data = 'user: ' + msg.user;
+	data += ', id: ' + msg.id;
+	data += ', pesan: ' + msg.msg;
+	html.innerHTML += data + "<br />";
+	console.log(msg);
+});
+
+function s(msg) {
+	var data = {msg: msg, user: 'agus', id: 1}; 
+	socket.emit('message', data);
+}
+</script>
+</body>
+</html>
